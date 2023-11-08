@@ -1,0 +1,80 @@
+<html>
+
+
+    <button id="connect">connect bluetooth</button>
+    <button id="w">w</button>
+    <button id="a">a</button>
+    <button id="s">s</button>
+    <button id="d">d</button>
+
+
+    <script>
+
+
+        // Arduino HM-10 Bluetooth Module Default Setting
+        const serviceUUID = 0xFFE0;
+        const serialUUID = 0xFFE1;
+        const encoder = new TextEncoder()
+
+
+        class Bluetooth {
+
+            constructor() {
+                this.device = null
+                this.characteristic = null
+            }
+
+            // Connect Device
+            async connect() {
+
+                this.device = await navigator.bluetooth.requestDevice({
+
+                    filters: [{ 
+                        services: [serviceUUID]
+                    }]
+
+                })
+                this.device.addEventListener('gattserverdisconnected', () => {
+                    alert('disconnect bluetooth')
+                })
+
+                const server = await this.device.gatt.connect()
+                const service = await server.getPrimaryService(serviceUUID)
+                this.characteristic = await service.getCharacteristic(serialUUID)
+
+                console.log('connect !, get characterlistic complete')
+
+            }
+
+            // send data
+            send(data) {
+                this.characteristic.writeValue(encoder.encode(data))
+            }
+
+
+
+        }
+
+
+        const connect = document.getElementById("connect")
+        const blt = new Bluetooth()
+
+        connect.onclick = async () => {
+
+            await blt.connect()
+
+        }
+
+        document.getElementById('w').onclick = () => blt.send('w')
+        document.getElementById('a').onclick = () => blt.send('a')
+        document.getElementById('s').onclick = () => blt.send('s')
+        document.getElementById('d').onclick = () => blt.send('d')
+        
+
+
+        
+        
+    </script>
+
+    
+</html>
