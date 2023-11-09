@@ -1,15 +1,109 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=430, initial-scale=1.0">
+    <title>Document</title>
+    <style>
 
+        #log {
 
-    <button id="connect">connect bluetooth</button>
-    <button id="w">w</button>
-    <button id="a">a</button>
-    <button id="s">s</button>
-    <button id="d">d</button>
+            width: 90vw;
+            margin: auto;
+            margin-top: 5vh;
+
+            height: 30vh;
+            overflow: hidden;
+
+            border-bottom: 3px solid #dedede90;
+
+        }
+
+        #content {
+            width:  90vw;
+            margin: auto;
+            margin-top: 5vh;
+        
+        }
+
+        #con {
+            margin-bottom: 5vh;
+        }
+
+        #gr {
+            width: 60vw;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        #gr > button {
+            width:  90%;
+            margin: 10%;
+            aspect-ratio: 1/1;
+        }
+
+        button {
+            border: none;
+            outline: none;
+            background-color: #dedede90;
+            border-radius: 20px;
+        }
+
+        button:focus {
+            background-color: skyblue;
+        }
+
+        #con > button {
+            width: 40vw;
+            height: 3vh;
+        }
+        .r {
+            color:indianred;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <div id="log">
+
+    </div>
+
+    <div id="content">
+
+        <div id="con">
+            <button id="connect">connect bluetooth</button>
+        </div>
+
+        <div id="gr">
+
+            <div></div>
+            <button id="w">w</button>
+            <div></div>
+            <button id="a">a</button>
+            <button id="n">stop</button>
+            <button id="s">s</button>
+            <div></div>
+            <button id="d">d</button>
+            <div></div>
+        </div>
+
+    </div>
 
 
     <script>
 
+        const log = document.getElementById('log')
+
+
+        console.log = (data) => {
+            log.innerHTML += `<div>${data}</div>`
+        }
+
+        console.error = (data) => {
+            log.innerHTML += `<div class="r">${data}</div>`
+        }
 
         // Arduino HM-10 Bluetooth Module Default Setting
         const serviceUUID = 0xFFE0;
@@ -42,7 +136,7 @@
                 const service = await server.getPrimaryService(serviceUUID)
                 this.characteristic = await service.getCharacteristic(serialUUID)
 
-                console.log('connect !, get characterlistic complete')
+                console.log('connect !, get characterlistic complete. 블루투스 연결 완료')
 
             }
 
@@ -69,12 +163,12 @@
         document.getElementById('a').onclick = () => blt.send('a')
         document.getElementById('s').onclick = () => blt.send('s')
         document.getElementById('d').onclick = () => blt.send('d')
+        document.getElementById('n').onclick = () => blt.send('n')
         
 
 
         
         
     </script>
-
-    
+</body>
 </html>
